@@ -20,9 +20,25 @@ export function PomodoroTimer() {
           setSecond(second - 1)
         }
       }, 1000)
+    } else if (minutes === 0 && second === 0) {
+      alert("Tempo esgotado!")
+      resetTimer();
+    } else {
+      clearInterval(interval)
     }
 
+    return() => clearInterval(interval)
   }, [isActive, minutes, second])
+
+  const toggleTimer = () => {
+    setIsActive(!isActive)
+  }
+
+  const resetTimer = () => {
+    setIsActive(false)
+    setMinutes(userTimer)
+    setSecond(0)
+  }
 
   const handleTimeChange = (e) => {
     setUserTimer(e.target.value)
@@ -40,8 +56,10 @@ export function PomodoroTimer() {
           <Input type="number" value={userTimer} onChange={handleTimeChange} isDisabled={isActive}/>
         </FormControl>
         <HStack spacing="4">
-          <Button>Iniciar</Button>
-          <Button colorScheme="gray">Reiniciar</Button>
+          <Button 
+          colorScheme={isActive ? "red" : "green"}
+          onClick={toggleTimer}>{isActive ? "Pausar" : "Iniciar"}</Button>
+          <Button onClick={resetTimer} colorScheme="gray">Reiniciar</Button>
         </HStack>
       </Box>
     </Center>
